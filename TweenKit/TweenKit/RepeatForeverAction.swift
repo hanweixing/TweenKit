@@ -26,7 +26,7 @@ public class RepeatForeverAction: InfiniteTimeAction {
     
     // MARK: - Private Properties
     let action: FiniteTimeAction
-    var lastRepeatNumber = 0
+    var lastRepeatNumber: Int = 0
 
     // MARK: - Private Methods
     
@@ -49,12 +49,15 @@ public class RepeatForeverAction: InfiniteTimeAction {
     }
     
     public func update(elapsedTime: CFTimeInterval) {
-        
-        let repeatNumber = Int(elapsedTime / action.duration)
-        
-        (lastRepeatNumber..<repeatNumber).forEach{ _ in
+        guard action.duration != 0 else {
             self.action.didFinish()
             self.action.willBegin()
+        } 
+        let repeatNumber = Int(elapsedTime / action.duration)
+        
+        (lastRepeatNumber..<repeatNumber).forEach{ [weak self] _ in
+            self?.action.didFinish()
+            self?.action.willBegin()
         }
 
         let actionT = (elapsedTime / action.duration).fract
