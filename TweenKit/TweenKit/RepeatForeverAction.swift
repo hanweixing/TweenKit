@@ -52,6 +52,7 @@ public class RepeatForeverAction: InfiniteTimeAction {
         guard action.duration != 0 else {
             self.action.didFinish()
             self.action.willBegin()
+            return
         } 
         let repeatNumber = Int(elapsedTime / action.duration)
         
